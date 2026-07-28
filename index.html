@@ -1,23 +1,1075 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escalas Bizantinas - Diatônica × Cromática × Enarmônica × Ocidental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        h1 .diatonic {
+            color: #ffd700;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(90deg, #ffd700, #ffed4a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .chromatic {
+            color: #ff6b9d;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+            background: linear-gradient(90deg, #ff6b9d, #ff8fab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .enharmonic {
+            color: #a855f7;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+            background: linear-gradient(90deg, #a855f7, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .sub {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.5em;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            font-size: 0.8em;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        .scale-section {
+            margin-bottom: 25px;
+        }
+
+        .scale-section h2 {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95em;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+        }
+
+        .scale-section h2 .bizantine-label {
+            color: #ffd700;
+        }
+
+        .scale-section h2 .chromatic-label {
+            color: #ff6b9d;
+        }
+
+        .scale-section h2 .enharmonic-label {
+            color: #a855f7;
+        }
+
+        .scale-section h2 .modern-label {
+            color: #74c0fc;
+        }
+
+        .scale-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 8px;
+        }
+
+        .note-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .note-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .note-card.active-bizantine {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .note-card.active-chromatic {
+            background: rgba(255, 107, 157, 0.15);
+            border-color: #ff6b9d;
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.1);
+        }
+
+        .note-card.active-enharmonic {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: #a855f7;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.1);
+        }
+
+        .note-card.active-modern {
+            background: rgba(116, 192, 252, 0.15);
+            border-color: #74c0fc;
+            box-shadow: 0 0 30px rgba(116, 192, 252, 0.1);
+        }
+
+        .note-card.bizantine .note-name {
+            color: #ffd700;
+        }
+
+        .note-card.chromatic .note-name {
+            color: #ff6b9d;
+        }
+
+        .note-card.enharmonic .note-name {
+            color: #a855f7;
+        }
+
+        .note-card.modern .note-name {
+            color: #74c0fc;
+        }
+
+        .note-name {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .note-detail {
+            font-size: 0.65em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        .note-detail.cents {
+            color: rgba(255, 215, 0, 0.6);
+            font-family: 'Courier New', monospace;
+        }
+
+        .note-detail.difference {
+            color: #ff6b6b;
+            font-weight: 500;
+        }
+
+        .display-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .display-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .display-row:last-child {
+            border-bottom: none;
+        }
+
+        .display-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85em;
+        }
+
+        .display-value {
+            color: #fff;
+            font-size: 1.0em;
+            font-weight: 500;
+        }
+
+        .display-value.cents {
+            color: #ffd700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .display-value.difference {
+            color: #ff6b6b;
+            font-family: 'Courier New', monospace;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #ffd700;
+            color: #1a1a2e;
+        }
+
+        .btn-primary:hover {
+            background: #ffed4a;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-chromatic {
+            background: #ff6b9d;
+            color: #1a1a2e;
+        }
+
+        .btn-chromatic:hover {
+            background: #ff8fab;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn-enharmonic {
+            background: #a855f7;
+            color: #fff;
+        }
+
+        .btn-enharmonic:hover {
+            background: #c084fc;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-modern {
+            background: #74c0fc;
+            color: #1a1a2e;
+        }
+
+        .btn-modern:hover {
+            background: #90d4ff;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(116, 192, 252, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .scale-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #ffd700;
+        }
+
+        .scale-info p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8em;
+            line-height: 1.6;
+        }
+
+        .scale-info strong {
+            color: #ffd700;
+        }
+
+        .scale-info .chromatic-info {
+            color: #ff6b9d;
+        }
+
+        .scale-info .enharmonic-info {
+            color: #a855f7;
+        }
+
+        .scale-info .diff-note {
+            color: #ff6b6b;
+        }
+
+        .scale-info .correct {
+            color: #51cf66;
+        }
+
+        .scale-info .calibrated {
+            color: #74c0fc;
+            font-weight: 600;
+        }
+
+        .scale-table {
+            margin-top: 25px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
+        }
+
+        .scale-table h3 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .scale-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82em;
+        }
+
+        .scale-table th {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            padding: 8px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .scale-table td {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 7px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .scale-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scale-table .bizantine {
+            color: #ffd700;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .scale-table .bizantine:hover {
+            color: #ffed4a;
+            text-decoration: underline;
+        }
+
+        .scale-table .modern {
+            color: #74c0fc;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .scale-table .modern:hover {
+            color: #90d4ff;
+            text-decoration: underline;
+        }
+
+        .scale-table .diff-cell {
+            color: #ff6b6b;
+            font-family: 'Courier New', monospace;
+        }
+
+        .scale-table .equal {
+            color: #51cf66;
+        }
+
+        .scale-table .clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .scale-table .clickable:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .scale-table .highlight-row {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .scale-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 5px;
+            }
+
+            .note-name {
+                font-size: 1.1em;
+            }
+
+            h1 {
+                font-size: 1.2em;
+            }
+
+            .scale-table {
+                font-size: 0.65em;
+                padding: 8px;
+            }
+
+            .scale-table th,
+            .scale-table td {
+                padding: 4px;
+            }
+
+            .controls .btn {
+                padding: 6px 12px;
+                font-size: 0.75em;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .scale-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-	
-<h1>oi mundo</h1>
-<p>testando para ver ser consigo rapidamente fazer um site estático para <strong>web</strong>
-usando apenas o git page</p>
+    <div class="container">
+        <h1>
+            🎵 Escalas Bizantinas
+            <span class="diatonic">Diatônica</span>
+            <span class="sub">|</span>
+            <span class="chromatic">Cromática</span>
+            <span class="sub">|</span>
+            <span class="enharmonic">Enarmônica</span>
+            <span class="sub">× Ocidental</span>
+        </h1>
+        <p class="subtitle">Quatro escalas independentes • Clique para ouvir • Frequência base: C3 = 130.8 Hz</p>
 
-<button onclick="window.open('teste.txt', '_blank')" class="meu-botao">
-  📄 Ver Arquivo
-</button>
-<button onclick="window.location.href = 'outra-pagina.html'">
-  🔄 Abrir outra página
-</button>
+        <!-- Grade Bizantina Diatônica -->
+        <div class="scale-section">
+            <h2>🏛️ <span class="bizantine-label">Diatônica (Modos 1, 3, 4, 5, 7)</span></h2>
+            <div class="scale-grid" id="bizantineGrid"></div>
+        </div>
 
+        <!-- Grade Cromática Suave -->
+        <div class="scale-section">
+            <h2>🎭 <span class="chromatic-label">Cromática Suave (Modos 2 e 6)</span></h2>
+            <div class="scale-grid" id="chromaticGrid"></div>
+        </div>
 
+        <!-- Grade Enarmônica -->
+        <div class="scale-section">
+            <h2>🌀 <span class="enharmonic-label">Enarmônica (Modos 3 e 7 - Barys)</span></h2>
+            <div class="scale-grid" id="enharmonicGrid"></div>
+        </div>
+
+        <!-- Grade Ocidental (Escala Maior) -->
+        <div class="scale-section">
+            <h2>🎼 <span class="modern-label">Ocidental (Escala Maior)</span></h2>
+            <div class="scale-grid" id="modernGrid"></div>
+        </div>
+
+        <div class="display-section" id="displaySection">
+            <div class="display-row">
+                <span class="display-label">Escala</span>
+                <span class="display-value" id="currentScale">—</span>
+            </div>
+            <div class="display-row">
+                <span class="display-label">Nota</span>
+                <span class="display-value" id="currentNote">—</span>
+            </div>
+            <div class="display-row">
+                <span class="display-label">Cents</span>
+                <span class="display-value cents" id="centsValue">—</span>
+            </div>
+            <div class="display-row">
+                <span class="display-label">Frequência (Hz)</span>
+                <span class="display-value" id="frequencyValue">—</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="playBizantineScale()">▶ Diatônica</button>
+            <button class="btn btn-chromatic" onclick="playChromaticScale()">▶ Cromática</button>
+            <button class="btn btn-enharmonic" onclick="playEnharmonicScale()">▶ Enarmônica</button>
+            <button class="btn btn-modern" onclick="playModernScale()">▶ Maior</button>
+            <button class="btn btn-secondary" onclick="stopSound()">⏹ Parar</button>
+            <button class="btn btn-secondary" onclick="resetDisplay()">↺ Reset</button>
+        </div>
+
+        <!-- Tabela da escala Diatônica com informações completas -->
+        <div class="scale-table">
+            <h3>📊 Escala Diatônica - Informações Completas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bizantina</th>
+                        <th>Ocidental</th>
+                        <th>Morias</th>
+                        <th>Cents</th>
+                        <th>Diferença</th>
+                        <th>Frequência</th>
+                    </tr>
+                </thead>
+                <tbody id="bizantineTableBody">
+                    <!-- Preenchido pelo JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="scale-info">
+            <p>
+                <strong>Diatônica:</strong> Ni → Pa → Vou → Ga → Di → Ke → Zo → Ni (12 | 10 | 8 | 12 | 12 | 10 | 8)<br>
+                <span class="chromatic-info"><strong>Cromática Suave:</strong> Ni → Pa → Vou → Ga → Di → Ke → Zo → Ni (8 | 12 | 12 | 6 | 8 | 12 | 14)</span><br>
+                <span class="enharmonic-info"><strong>Enarmônica (Barys):</strong> Ni → Pa → Vou → Ga → Di → Ke → Zo → Ni (6 | 12 | 12 | 6 | 12 | 12 | 12)</span><br>
+                <strong>Maior (Dó):</strong> Dó → Ré → Mi → Fá → Sol → Lá → Si → Dó<br>
+                <span class="calibrated">🔵 Frequência base: C3 = 130.8 Hz (calibrado)</span><br>
+                <span class="correct">✅ Clique nos nomes na tabela para ouvir as notas</span><br>
+                <span class="diff-note">🔴 Diferença em cents em relação ao temperamento igual</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do AudioContext
+        const audioCtx = new AudioContext();
+        let currentOscillator = null;
+        let currentGainNode = null;
+        let activeBizantineIndex = -1;
+        let activeChromaticIndex = -1;
+        let activeEnharmonicIndex = -1;
+        let activeModernIndex = -1;
+
+        // Frequência alvo
+        const TARGET_FREQ = 130.8;
+        const CORRECTION_FACTOR = TARGET_FREQ / 131.0;
+        const BASE_FREQ = 130.81 * CORRECTION_FACTOR;
+
+        // Escala Bizantina Diatônica CORRIGIDA
+        const escalaBizantina = [
+            { nome: 'Ni', moderno: 'Dó', morias: 0, cents: 0, diff: 0 },
+            { nome: 'Pa', moderno: 'Ré', morias: 12, cents: 200, diff: 0 },
+            { nome: 'Vou', moderno: 'Ré#', morias: 22, cents: 366.67, diff: -33.33 },
+            { nome: 'Ga', moderno: 'Mi', morias: 30, cents: 500, diff: -100 },
+            { nome: 'Di', moderno: 'Fá#', morias: 42, cents: 700, diff: 0 },
+            { nome: 'Ke', moderno: 'Sol', morias: 54, cents: 900, diff: 0 },        // CORRIGIDO
+            { nome: 'Zo', moderno: 'Lá#', morias: 64, cents: 1066.67, diff: -33.33 }, // CORRIGIDO
+            { nome: 'Ni', moderno: 'Dó', morias: 72, cents: 1200, diff: 0 }
+        ];
+
+        // Escala Cromática Suave (Morias: 8 | 12 | 12 | 6 | 8 | 12 | 14)
+        const escalaCromatica = [
+            { nome: 'Ni', moderno: 'Dó', morias: 0, cents: 0, diff: 0 },
+            { nome: 'Pa', moderno: 'Dó#', morias: 8, cents: 133.33, diff: +33.33 },
+            { nome: 'Vou', moderno: 'Ré#', morias: 20, cents: 333.33, diff: -66.67 },
+            { nome: 'Ga', moderno: 'Mi', morias: 32, cents: 533.33, diff: -66.67 },
+            { nome: 'Di', moderno: 'Fá', morias: 38, cents: 633.33, diff: -66.67 },
+            { nome: 'Ke', moderno: 'Sol♭', morias: 46, cents: 766.67, diff: -33.33 },
+            { nome: 'Zo', moderno: 'Lá', morias: 58, cents: 966.67, diff: -33.33 },
+            { nome: 'Ni', moderno: 'Dó', morias: 72, cents: 1200, diff: 0 }
+        ];
+
+        // Escala Enarmônica (Morias: 6 | 12 | 12 | 6 | 12 | 12 | 12)
+        const escalaEnarmonica = [
+            { nome: 'Ni', moderno: 'Dó', morias: 0, cents: 0, diff: 0 },
+            { nome: 'Pa', moderno: 'Dó#', morias: 6, cents: 100, diff: 0 },
+            { nome: 'Vou', moderno: 'Ré#', morias: 18, cents: 300, diff: -100 },
+            { nome: 'Ga', moderno: 'Mi', morias: 30, cents: 500, diff: -100 },
+            { nome: 'Di', moderno: 'Fá', morias: 36, cents: 600, diff: -100 },
+            { nome: 'Ke', moderno: 'Sol', morias: 48, cents: 800, diff: -100 },
+            { nome: 'Zo', moderno: 'Lá', morias: 60, cents: 1000, diff: -100 },
+            { nome: 'Ni', moderno: 'Dó', morias: 72, cents: 1200, diff: 0 }
+        ];
+
+        // Escala Maior (Dó)
+        const escalaMaior = [
+            { nome: 'Dó', cents: 0 },
+            { nome: 'Ré', cents: 200 },
+            { nome: 'Mi', cents: 400 },
+            { nome: 'Fá', cents: 500 },
+            { nome: 'Sol', cents: 700 },
+            { nome: 'Lá', cents: 900 },
+            { nome: 'Si', cents: 1100 },
+            { nome: 'Dó', cents: 1200 }
+        ];
+
+        function getFrequencyFromCents(centsOffset) {
+            return BASE_FREQ * Math.pow(2, centsOffset / 1200);
+        }
+
+        function playBizantineNote(index, duration = 0.8) {
+            try {
+                stopSound();
+                const nota = escalaBizantina[index];
+                if (!nota) return;
+
+                currentOscillator = audioCtx.createOscillator();
+                currentGainNode = audioCtx.createGain();
+                currentOscillator.type = 'sawtooth';
+                const freq = getFrequencyFromCents(nota.cents);
+                currentOscillator.frequency.value = freq;
+                currentOscillator.detune.value = 0;
+
+                currentGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + duration - 0.1);
+                currentGainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
+
+                currentOscillator.connect(currentGainNode);
+                currentGainNode.connect(audioCtx.destination);
+                currentOscillator.start(audioCtx.currentTime);
+                currentOscillator.stop(audioCtx.currentTime + duration);
+
+                updateDisplay('Diatônica', nota.nome, nota.cents);
+                activeBizantineIndex = index;
+                activeChromaticIndex = -1;
+                activeEnharmonicIndex = -1;
+                activeModernIndex = -1;
+                updateActiveCards(index, -1, -1, -1);
+
+            } catch (error) {
+                console.error('Erro ao tocar nota diatônica:', error);
+            }
+        }
+
+        function playChromaticNote(index, duration = 0.8) {
+            try {
+                stopSound();
+                const nota = escalaCromatica[index];
+                if (!nota) return;
+
+                currentOscillator = audioCtx.createOscillator();
+                currentGainNode = audioCtx.createGain();
+                currentOscillator.type = 'sawtooth';
+                const freq = getFrequencyFromCents(nota.cents);
+                currentOscillator.frequency.value = freq;
+                currentOscillator.detune.value = 0;
+
+                currentGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + duration - 0.1);
+                currentGainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
+
+                currentOscillator.connect(currentGainNode);
+                currentGainNode.connect(audioCtx.destination);
+                currentOscillator.start(audioCtx.currentTime);
+                currentOscillator.stop(audioCtx.currentTime + duration);
+
+                updateDisplay('Cromática Suave', nota.nome, nota.cents);
+                activeChromaticIndex = index;
+                activeBizantineIndex = -1;
+                activeEnharmonicIndex = -1;
+                activeModernIndex = -1;
+                updateActiveCards(-1, index, -1, -1);
+
+            } catch (error) {
+                console.error('Erro ao tocar nota cromática:', error);
+            }
+        }
+
+        function playEnharmonicNote(index, duration = 0.8) {
+            try {
+                stopSound();
+                const nota = escalaEnarmonica[index];
+                if (!nota) return;
+
+                currentOscillator = audioCtx.createOscillator();
+                currentGainNode = audioCtx.createGain();
+                currentOscillator.type = 'sawtooth';
+                const freq = getFrequencyFromCents(nota.cents);
+                currentOscillator.frequency.value = freq;
+                currentOscillator.detune.value = 0;
+
+                currentGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + duration - 0.1);
+                currentGainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
+
+                currentOscillator.connect(currentGainNode);
+                currentGainNode.connect(audioCtx.destination);
+                currentOscillator.start(audioCtx.currentTime);
+                currentOscillator.stop(audioCtx.currentTime + duration);
+
+                updateDisplay('Enarmônica (Barys)', nota.nome, nota.cents);
+                activeEnharmonicIndex = index;
+                activeBizantineIndex = -1;
+                activeChromaticIndex = -1;
+                activeModernIndex = -1;
+                updateActiveCards(-1, -1, index, -1);
+
+            } catch (error) {
+                console.error('Erro ao tocar nota enarmônica:', error);
+            }
+        }
+
+        function playModernNote(index, duration = 0.8) {
+            try {
+                stopSound();
+                const nota = escalaMaior[index];
+                if (!nota) return;
+
+                currentOscillator = audioCtx.createOscillator();
+                currentGainNode = audioCtx.createGain();
+                currentOscillator.type = 'sawtooth';
+                const freq = getFrequencyFromCents(nota.cents);
+                currentOscillator.frequency.value = freq;
+                currentOscillator.detune.value = 0;
+
+                currentGainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                currentGainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + duration - 0.1);
+                currentGainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
+
+                currentOscillator.connect(currentGainNode);
+                currentGainNode.connect(audioCtx.destination);
+                currentOscillator.start(audioCtx.currentTime);
+                currentOscillator.stop(audioCtx.currentTime + duration);
+
+                updateDisplay('Ocidental (Maior)', nota.nome, nota.cents);
+                activeModernIndex = index;
+                activeBizantineIndex = -1;
+                activeChromaticIndex = -1;
+                activeEnharmonicIndex = -1;
+                updateActiveCards(-1, -1, -1, index);
+
+            } catch (error) {
+                console.error('Erro ao tocar nota moderna:', error);
+            }
+        }
+
+        function stopSound() {
+            if (currentOscillator) {
+                try {
+                    currentOscillator.stop();
+                    currentOscillator.disconnect();
+                } catch (e) {}
+                currentOscillator = null;
+            }
+            if (currentGainNode) {
+                try {
+                    currentGainNode.disconnect();
+                } catch (e) {}
+                currentGainNode = null;
+            }
+        }
+
+        function updateDisplay(scale, note, cents) {
+            document.getElementById('currentScale').textContent = scale;
+            document.getElementById('currentNote').textContent = note;
+            document.getElementById('centsValue').textContent = `${cents.toFixed(2)} cents`;
+            const freq = getFrequencyFromCents(cents);
+            document.getElementById('frequencyValue').textContent = `${freq.toFixed(2)} Hz`;
+        }
+
+        function resetDisplay() {
+            document.getElementById('currentScale').textContent = '—';
+            document.getElementById('currentNote').textContent = '—';
+            document.getElementById('centsValue').textContent = '—';
+            document.getElementById('frequencyValue').textContent = '—';
+            activeBizantineIndex = -1;
+            activeChromaticIndex = -1;
+            activeEnharmonicIndex = -1;
+            activeModernIndex = -1;
+            updateActiveCards(-1, -1, -1, -1);
+            stopSound();
+        }
+
+        function updateActiveCards(bizantineIdx, chromaticIdx, enharmonicIdx, modernIdx) {
+            document.querySelectorAll('#bizantineGrid .note-card').forEach((card, i) => {
+                card.classList.toggle('active-bizantine', i === bizantineIdx);
+            });
+            document.querySelectorAll('#chromaticGrid .note-card').forEach((card, i) => {
+                card.classList.toggle('active-chromatic', i === chromaticIdx);
+            });
+            document.querySelectorAll('#enharmonicGrid .note-card').forEach((card, i) => {
+                card.classList.toggle('active-enharmonic', i === enharmonicIdx);
+            });
+            document.querySelectorAll('#modernGrid .note-card').forEach((card, i) => {
+                card.classList.toggle('active-modern', i === modernIdx);
+            });
+        }
+
+        function createBizantineGrid() {
+            const grid = document.getElementById('bizantineGrid');
+            grid.innerHTML = '';
+            escalaBizantina.forEach((nota, index) => {
+                const card = document.createElement('div');
+                card.className = 'note-card bizantine';
+                card.innerHTML = `
+                    <div class="note-name">${nota.nome}</div>
+                    <div class="note-detail">${nota.moderno}</div>
+                    <div class="note-detail cents">${nota.cents.toFixed(0)}¢</div>
+                `;
+                card.addEventListener('click', () => {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    playBizantineNote(index);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function createChromaticGrid() {
+            const grid = document.getElementById('chromaticGrid');
+            grid.innerHTML = '';
+            escalaCromatica.forEach((nota, index) => {
+                const card = document.createElement('div');
+                card.className = 'note-card chromatic';
+                card.innerHTML = `
+                    <div class="note-name">${nota.nome}</div>
+                    <div class="note-detail">${nota.moderno}</div>
+                    <div class="note-detail cents">${nota.cents.toFixed(0)}¢</div>
+                `;
+                card.addEventListener('click', () => {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    playChromaticNote(index);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function createEnharmonicGrid() {
+            const grid = document.getElementById('enharmonicGrid');
+            grid.innerHTML = '';
+            escalaEnarmonica.forEach((nota, index) => {
+                const card = document.createElement('div');
+                card.className = 'note-card enharmonic';
+                card.innerHTML = `
+                    <div class="note-name">${nota.nome}</div>
+                    <div class="note-detail">${nota.moderno}</div>
+                    <div class="note-detail cents">${nota.cents.toFixed(0)}¢</div>
+                `;
+                card.addEventListener('click', () => {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    playEnharmonicNote(index);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function createModernGrid() {
+            const grid = document.getElementById('modernGrid');
+            grid.innerHTML = '';
+            escalaMaior.forEach((nota, index) => {
+                const card = document.createElement('div');
+                card.className = 'note-card modern';
+                card.innerHTML = `
+                    <div class="note-name">${nota.nome}</div>
+                    <div class="note-detail cents">${nota.cents.toFixed(0)}¢</div>
+                `;
+                card.addEventListener('click', () => {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    playModernNote(index);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function createBizantineTable() {
+            const tbody = document.getElementById('bizantineTableBody');
+            tbody.innerHTML = '';
+            escalaBizantina.forEach((nota, index) => {
+                const tr = document.createElement('tr');
+                const diffText = nota.diff === 0 ? '0¢' : 
+                                nota.diff > 0 ? `+${nota.diff.toFixed(2)}¢` : 
+                                `${nota.diff.toFixed(2)}¢`;
+                const diffClass = nota.diff === 0 ? 'equal' : 'diff-cell';
+                const freq = getFrequencyFromCents(nota.cents);
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="bizantine clickable">${nota.nome}</td>
+                    <td class="modern clickable">${nota.moderno}</td>
+                    <td>${nota.morias}</td>
+                    <td>${nota.cents.toFixed(2)}</td>
+                    <td class="${diffClass}">${diffText}</td>
+                    <td>${freq.toFixed(2)} Hz</td>
+                `;
+                tr.querySelector('.bizantine').addEventListener('click', () => {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    playBizantineNote(index);
+                });
+                tr.querySelector('.modern').addEventListener('click', () => {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    playBizantineNote(index);
+                });
+                tbody.appendChild(tr);
+            });
+        }
+
+        function playBizantineScale() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let delay = 0;
+            const duration = 0.6;
+            const interval = 0.8;
+            escalaBizantina.forEach((_, index) => {
+                setTimeout(() => playBizantineNote(index, duration), delay * 1000);
+                delay += interval;
+            });
+        }
+
+        function playChromaticScale() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let delay = 0;
+            const duration = 0.6;
+            const interval = 0.8;
+            escalaCromatica.forEach((_, index) => {
+                setTimeout(() => playChromaticNote(index, duration), delay * 1000);
+                delay += interval;
+            });
+        }
+
+        function playEnharmonicScale() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let delay = 0;
+            const duration = 0.6;
+            const interval = 0.8;
+            escalaEnarmonica.forEach((_, index) => {
+                setTimeout(() => playEnharmonicNote(index, duration), delay * 1000);
+                delay += interval;
+            });
+        }
+
+        function playModernScale() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let delay = 0;
+            const duration = 0.6;
+            const interval = 0.8;
+            escalaMaior.forEach((_, index) => {
+                setTimeout(() => playModernNote(index, duration), delay * 1000);
+                delay += interval;
+            });
+        }
+
+        // Inicializar
+        createBizantineGrid();
+        createChromaticGrid();
+        createEnharmonicGrid();
+        createModernGrid();
+        createBizantineTable();
+
+        console.log('🎵 Escalas Bizantinas carregadas!');
+        console.log('🏛️ Diatônica: 12 | 10 | 8 | 12 | 12 | 10 | 8');
+        console.log('   Ni(Dó) → Pa(Ré) → Vou(Ré#) → Ga(Mi) → Di(Fá#) → Ke(Sol) → Zo(Lá#) → Ni(Dó)');
+        console.log('🎭 Cromática Suave: 8 | 12 | 12 | 6 | 8 | 12 | 14');
+        console.log('🌀 Enarmônica (Barys): 6 | 12 | 12 | 6 | 12 | 12 | 12');
+        console.log('🎯 Frequência base: 130.8 Hz');
+
+        // Atalhos de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '8') {
+                const index = parseInt(e.key) - 1;
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.shiftKey) {
+                        // Ctrl+Shift = Enarmônica
+                        if (index < escalaEnarmonica.length) {
+                            if (audioCtx.state === 'suspended') audioCtx.resume();
+                            playEnharmonicNote(index);
+                        }
+                    } else {
+                        // Ctrl = Cromática
+                        if (index < escalaCromatica.length) {
+                            if (audioCtx.state === 'suspended') audioCtx.resume();
+                            playChromaticNote(index);
+                        }
+                    }
+                } else if (e.shiftKey) {
+                    // Shift = Diatônica
+                    if (index < escalaBizantina.length) {
+                        if (audioCtx.state === 'suspended') audioCtx.resume();
+                        playBizantineNote(index);
+                    }
+                } else {
+                    // Número sozinho = Maior
+                    if (index < escalaMaior.length) {
+                        if (audioCtx.state === 'suspended') audioCtx.resume();
+                        playModernNote(index);
+                    }
+                }
+            }
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.shiftKey) {
+                        playEnharmonicScale();
+                    } else {
+                        playChromaticScale();
+                    }
+                } else if (e.shiftKey) {
+                    playBizantineScale();
+                } else {
+                    playModernScale();
+                }
+            }
+            if (e.key === 'Escape') {
+                stopSound();
+                resetDisplay();
+            }
+        });
+
+        console.log('📝 Teclas:');
+        console.log('   1-8 = Maior');
+        console.log('   Shift+1-8 = Diatônica');
+        console.log('   Ctrl+1-8 = Cromática');
+        console.log('   Ctrl+Shift+1-8 = Enarmônica');
+        console.log('   Enter = Maior | Shift+Enter = Diatônica | Ctrl+Enter = Cromática | Ctrl+Shift+Enter = Enarmônica');
+        console.log('   ESC = Parar');
+    </script>
 </body>
 </html>
